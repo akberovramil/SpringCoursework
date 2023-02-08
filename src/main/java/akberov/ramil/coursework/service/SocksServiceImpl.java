@@ -1,7 +1,7 @@
 package akberov.ramil.coursework.service;
 
-import akberov.ramil.coursework.exceptions.InvalidParametersForSocksExceptions;
-import akberov.ramil.coursework.exceptions.SocksNotFoundExceptions;
+import akberov.ramil.coursework.exceptions.NumberOfSocksException;
+import akberov.ramil.coursework.exceptions.SocksNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,10 +19,8 @@ import java.nio.file.Path;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
@@ -47,48 +45,59 @@ public class SocksServiceImpl implements SocksService {
     }
 
     @Override
-    public long addSocks(Socks sock) throws InvalidParametersForSocksExceptions {
+    public void addSocks(Socks sock) {
         socksList.add(sock);
         saveToFile();
-        return 0;
     }
 
     @Override
-    public Socks saleSocks(Colors color, Size size, Integer cotton) throws SocksNotFoundExceptions, InvalidParametersForSocksExceptions {
+    public void saleSocks(Colors color, Size size, Integer cotton, Long quantity) {
         for (Socks socks1 : socksList) {
             if (socks1.getColors().equals(color) && socks1.getSize().equals(size) && socks1.getCottonPart().equals(cotton)) {
+                if (socks1.getQuantity() - quantity < 0) {
+                    throw new NumberOfSocksException();
+                }
+                socks1.setQuantity(socks1.getQuantity() - quantity);
                 socksList.remove(socks1);
                 saveToFile();
+            } else {
+                throw new SocksNotFoundException();
             }
         }
 
-        return null;
     }
 
     @Override
-    public Integer getNumberOfSocks(Colors color, Size size, Integer cotton) throws SocksNotFoundExceptions, InvalidParametersForSocksExceptions {
-        Integer numderOfSocks = 1;
+    public Integer getNumberOfSocks(Colors color, Size size, Integer cotton)  {
+        Integer numberOfSocks = 1;
 
         for (Socks socks1 : socksList) {
             if (socks1.getColors().equals(color) && socks1.getSize().equals(size) && socks1.getCottonPart().equals(cotton)) {
-                numderOfSocks++;
+                numberOfSocks++;
                 saveToFile();
+            } else {
+                throw new SocksNotFoundException();
             }
         }
 
-        return numderOfSocks;
+        return numberOfSocks;
     }
 
     @Override
-    public Socks deleteDefectiveSocks(Colors color, Size size, Integer cotton) throws SocksNotFoundExceptions, InvalidParametersForSocksExceptions {
+    public void deleteDefectiveSocks(Colors color, Size size, Integer cotton, Long quantity)  {
         for (Socks socks1 : socksList) {
             if (socks1.getColors().equals(color) && socks1.getSize().equals(size) && socks1.getCottonPart().equals(cotton)) {
+                if (socks1.getQuantity() - quantity < 0) {
+                    throw new NumberOfSocksException();
+                }
+                socks1.setQuantity(socks1.getQuantity() - quantity);
                 socksList.remove(socks1);
                 saveToFile();
+            } else {
+                throw new SocksNotFoundException();
             }
-        }
 
-        return null;
+        }
     }
 
     private void saveToFile() {

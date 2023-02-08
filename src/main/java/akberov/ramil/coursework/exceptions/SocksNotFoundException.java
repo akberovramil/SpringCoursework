@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class SocksNotFoundExceptions extends RuntimeException {
+public class SocksNotFoundException extends RuntimeException {
 
 
     @Override

@@ -1,7 +1,7 @@
 package akberov.ramil.coursework.controllers;
 
-import akberov.ramil.coursework.exceptions.InvalidParametersForSocksExceptions;
-import akberov.ramil.coursework.exceptions.SocksNotFoundExceptions;
+import akberov.ramil.coursework.exceptions.NumberOfSocksException;
+import akberov.ramil.coursework.exceptions.SocksNotFoundException;
 import akberov.ramil.coursework.model.Colors;
 import akberov.ramil.coursework.model.Size;
 import akberov.ramil.coursework.model.Socks;
@@ -44,12 +44,10 @@ public class SocksController {
     @Operation(
             summary = "Приход товара на склад"
     )
-    public ResponseEntity<Object> addSocks(@RequestBody Socks socks) throws SocksNotFoundExceptions, InvalidParametersForSocksExceptions {
+    public ResponseEntity<Object> addSocks(@RequestBody Socks socks)  {
         try {
             socksService.addSocks(socks);
-        } catch (SocksNotFoundExceptions e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (InvalidParametersForSocksExceptions e) {
+        } catch (SocksNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().build();
@@ -64,14 +62,12 @@ public class SocksController {
     public ResponseEntity<Object> getSelectedSock(@RequestParam(name = "color") Colors color,
                                                   @RequestParam(name = "size") Size size,
                                                   @RequestParam(name = "cotton") Integer cotton,
-                                                  @RequestParam(required = false) Integer quantity) throws SocksNotFoundExceptions, InvalidParametersForSocksExceptions {
+                                                  @RequestParam(required = false) Integer quantity)  {
 
         try {
             Integer amountSocks = socksService.getNumberOfSocks(color, size, cotton);
             return ResponseEntity.ok(amountSocks);
-        } catch (SocksNotFoundExceptions e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (InvalidParametersForSocksExceptions e) {
+        } catch (SocksNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -84,12 +80,12 @@ public class SocksController {
     public ResponseEntity<Object> saleSocks(@RequestParam(name = "color") Colors color,
                                             @RequestParam(name = "size") Size size,
                                             @RequestParam(name = "cotton") Integer cotton,
-                                            @RequestParam(required = false) Integer quantity) throws SocksNotFoundExceptions, InvalidParametersForSocksExceptions {
+                                            @RequestParam(name = " quantity") Long quantity)  {
         try {
-            socksService.saleSocks(color, size, cotton);
-        } catch (SocksNotFoundExceptions e) {
+            socksService.saleSocks(color, size, cotton, quantity);
+        } catch (SocksNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (InvalidParametersForSocksExceptions e) {
+        } catch (NumberOfSocksException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().build();
@@ -102,13 +98,13 @@ public class SocksController {
     public ResponseEntity<Object> deleteDefectiveSocks(@RequestParam(name = "color") Colors color,
                                                        @RequestParam(name = "size") Size size,
                                                        @RequestParam(name = "cotton") Integer cotton,
-                                                       @RequestParam(required = false) Integer quantity) throws SocksNotFoundExceptions, InvalidParametersForSocksExceptions {
+                                                       @RequestParam(name = "quantity") Long quantity)  {
 
         try {
-            socksService.deleteDefectiveSocks(color, size, cotton);
-        } catch (SocksNotFoundExceptions e) {
+            socksService.deleteDefectiveSocks(color, size, cotton, quantity);
+        } catch (SocksNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (InvalidParametersForSocksExceptions e) {
+        }  catch (NumberOfSocksException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().build();
