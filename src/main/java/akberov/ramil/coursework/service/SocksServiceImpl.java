@@ -45,9 +45,18 @@ public class SocksServiceImpl implements SocksService {
     }
 
     @Override
-    public void addSocks(Socks sock) {
-        socksList.add(sock);
-        saveToFile();
+    public void addSocks(Colors color, Size size, Integer cotton, Long quantity) {
+        for (Socks socks1 : socksList) {
+            if (socks1.getColors().equals(color) && socks1.getSize().equals(size) && socks1.getCottonPart().equals(cotton)) {
+                socks1.setQuantity(socks1.getQuantity() + quantity);
+                saveToFile();
+            }
+        }
+        Socks socks2 = new Socks(color, size, cotton, quantity);
+        if (!socksList.contains(socks2)) {
+            socksList.add(socks2);
+            saveToFile();
+        }
     }
 
     @Override
@@ -56,47 +65,57 @@ public class SocksServiceImpl implements SocksService {
             if (socks1.getColors().equals(color) && socks1.getSize().equals(size) && socks1.getCottonPart().equals(cotton)) {
                 if (socks1.getQuantity() - quantity < 0) {
                     throw new NumberOfSocksException();
+                } else if (socks1.getQuantity() - quantity == 0) {
+                    socks1.setQuantity(socks1.getQuantity() - quantity);
+                    socksList.remove(socks1);
+                    saveToFile();
+                } else if (socks1.getQuantity() - quantity > 0) {
+                    socks1.setQuantity(socks1.getQuantity() - quantity);
+                    saveToFile();
                 }
-                socks1.setQuantity(socks1.getQuantity() - quantity);
-                socksList.remove(socks1);
-                saveToFile();
-            } else {
-                throw new SocksNotFoundException();
+
             }
         }
-
+        Socks socks2 = new Socks(color, size, cotton, quantity);
+        if (!socksList.contains(socks2)) {
+            socksList.add(socks2);
+            saveToFile();
+        }
     }
 
     @Override
-    public Integer getNumberOfSocks(Colors color, Size size, Integer cotton)  {
-        Integer numberOfSocks = 1;
-
+    public Long getNumberOfSocks(Colors color, Size size, Integer cotton) {
         for (Socks socks1 : socksList) {
             if (socks1.getColors().equals(color) && socks1.getSize().equals(size) && socks1.getCottonPart().equals(cotton)) {
-                numberOfSocks++;
                 saveToFile();
-            } else {
-                throw new SocksNotFoundException();
+                return socks1.getQuantity();
+
             }
         }
-
-        return numberOfSocks;
+        throw new SocksNotFoundException();
     }
 
     @Override
-    public void deleteDefectiveSocks(Colors color, Size size, Integer cotton, Long quantity)  {
+    public void deleteDefectiveSocks(Colors color, Size size, Integer cotton, Long quantity) {
         for (Socks socks1 : socksList) {
             if (socks1.getColors().equals(color) && socks1.getSize().equals(size) && socks1.getCottonPart().equals(cotton)) {
                 if (socks1.getQuantity() - quantity < 0) {
                     throw new NumberOfSocksException();
+                } else if (socks1.getQuantity() - quantity == 0) {
+                    socks1.setQuantity(socks1.getQuantity() - quantity);
+                    socksList.remove(socks1);
+                    saveToFile();
+                } else if (socks1.getQuantity() - quantity > 0) {
+                    socks1.setQuantity(socks1.getQuantity() - quantity);
+                    saveToFile();
                 }
-                socks1.setQuantity(socks1.getQuantity() - quantity);
-                socksList.remove(socks1);
-                saveToFile();
-            } else {
-                throw new SocksNotFoundException();
-            }
 
+            }
+        }
+        Socks socks2 = new Socks(color, size, cotton, quantity);
+        if (!socksList.contains(socks2)) {
+            socksList.add(socks2);
+            saveToFile();
         }
     }
 

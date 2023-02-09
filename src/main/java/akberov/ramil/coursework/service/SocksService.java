@@ -9,11 +9,13 @@ import java.nio.file.Path;
 
 public interface SocksService {
 
-    public void addSocks(Socks sock);
+
+
+    void addSocks(Colors color, Size size, Integer cotton, Long quantity);
 
     void saleSocks(Colors color, Size size, Integer cotton, Long soldQuantit) ;
 
-    Integer getNumberOfSocks(Colors color, Size size, Integer cotton);
+    Long getNumberOfSocks(Colors color, Size size, Integer cotton);
 
 
     void deleteDefectiveSocks(Colors color, Size size, Integer cotton, Long quantity);

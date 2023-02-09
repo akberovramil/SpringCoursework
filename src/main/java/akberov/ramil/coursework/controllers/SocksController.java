@@ -44,9 +44,12 @@ public class SocksController {
     @Operation(
             summary = "Приход товара на склад"
     )
-    public ResponseEntity<Object> addSocks(@RequestBody Socks socks)  {
+    public ResponseEntity<Object> addSocks(@RequestParam(name = "color") Colors color,
+                                           @RequestParam(name = "size") Size size,
+                                           @RequestParam(name = "cotton") Integer cotton,
+                                           @RequestParam(name = " quantity") Long quantity) {
         try {
-            socksService.addSocks(socks);
+            socksService.addSocks(color, size, cotton, quantity);
         } catch (SocksNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -57,15 +60,15 @@ public class SocksController {
 
     @GetMapping()
     @Operation(
-            summary = "Возвращает общее количество носков на складе по опредленным критериям"
+            summary = "Возвращает общее количество носков на складе по определенным критериям"
     )
     public ResponseEntity<Object> getSelectedSock(@RequestParam(name = "color") Colors color,
                                                   @RequestParam(name = "size") Size size,
                                                   @RequestParam(name = "cotton") Integer cotton,
-                                                  @RequestParam(required = false) Integer quantity)  {
+                                                  @RequestParam(required = false) Long quantity) {
 
         try {
-            Integer amountSocks = socksService.getNumberOfSocks(color, size, cotton);
+            Long amountSocks = socksService.getNumberOfSocks(color, size, cotton);
             return ResponseEntity.ok(amountSocks);
         } catch (SocksNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -80,7 +83,7 @@ public class SocksController {
     public ResponseEntity<Object> saleSocks(@RequestParam(name = "color") Colors color,
                                             @RequestParam(name = "size") Size size,
                                             @RequestParam(name = "cotton") Integer cotton,
-                                            @RequestParam(name = " quantity") Long quantity)  {
+                                            @RequestParam(name = " quantity") Long quantity) {
         try {
             socksService.saleSocks(color, size, cotton, quantity);
         } catch (SocksNotFoundException e) {
@@ -98,13 +101,13 @@ public class SocksController {
     public ResponseEntity<Object> deleteDefectiveSocks(@RequestParam(name = "color") Colors color,
                                                        @RequestParam(name = "size") Size size,
                                                        @RequestParam(name = "cotton") Integer cotton,
-                                                       @RequestParam(name = "quantity") Long quantity)  {
+                                                       @RequestParam(name = "quantity") Long quantity) {
 
         try {
             socksService.deleteDefectiveSocks(color, size, cotton, quantity);
         } catch (SocksNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        }  catch (NumberOfSocksException e) {
+        } catch (NumberOfSocksException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().build();

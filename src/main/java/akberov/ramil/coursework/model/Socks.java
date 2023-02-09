@@ -9,6 +9,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -40,6 +41,19 @@ public class Socks {
         this.colors = colors;
         this.size = size;
         this.cottonPart = cottonPart;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Socks socks = (Socks) o;
+        return colors == socks.colors && size == socks.size && Objects.equals(cottonPart, socks.cottonPart);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(colors, size, cottonPart);
     }
 
     @Override
