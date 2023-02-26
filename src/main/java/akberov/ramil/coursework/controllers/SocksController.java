@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -98,7 +99,7 @@ public class SocksController {
     @Operation(
             summary = "Удаление бракованных носков"
     )
-    public ResponseEntity<Object> deleteDefectiveSocks(@RequestParam(name = "color") Colors color,
+    public ResponseEntity<Object> deleteDefectiveSocks( @RequestParam(name = "color") Colors color,
                                                        @RequestParam(name = "size") Size size,
                                                        @RequestParam(name = "cotton") Integer cotton,
                                                        @RequestParam(name = "quantity") Long quantity) {
@@ -188,3 +189,4 @@ public class SocksController {
     }
 
 }
+

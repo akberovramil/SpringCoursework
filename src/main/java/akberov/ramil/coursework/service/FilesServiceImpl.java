@@ -15,10 +15,10 @@ import java.io.IOException;
 public class FilesServiceImpl implements FilesService {
 
     @Value("${path.to.data.dir}")
-    private String dataFilePath;
+    public String dataFilePath;
 
     @Value("${socks.data.file}")
-    private String dataFileName;
+    public String dataFileName;
 
     @Override
     public boolean saveToFile(String json) {

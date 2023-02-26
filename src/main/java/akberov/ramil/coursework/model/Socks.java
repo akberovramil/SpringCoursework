@@ -1,9 +1,7 @@
 package akberov.ramil.coursework.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -13,6 +11,7 @@ import java.util.Objects;
 
 @Data
 @NoArgsConstructor
+@ToString
 @EqualsAndHashCode
 
 public class Socks {
@@ -23,11 +22,10 @@ public class Socks {
     private Size size;
 
     @NotEmpty
-    @Min(value = 0, message = "Минимальное процентное содержание хлопка в носках должно быть не меньше 0%")
-    @Max(value = 100, message = "Максимальное процентное содержание хлопка в носках должно быть не больше 100%")
+    @Range(min = 0, max = 100, message = "Процентное содержание хлопка в носках должно быть не менньше 0%  и не больше 100%")
     private Integer cottonPart;
 
-    @Positive
+    @Positive(message = "Количество должно быть положительным числом")
     private Long quantity;
 
     public Socks(Colors colors, Size size, Integer cottonPart, Long quantity) {
@@ -41,27 +39,6 @@ public class Socks {
         this.colors = colors;
         this.size = size;
         this.cottonPart = cottonPart;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Socks socks = (Socks) o;
-        return colors == socks.colors && size == socks.size && Objects.equals(cottonPart, socks.cottonPart);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(colors, size, cottonPart);
-    }
-
-    @Override
-    public String toString() {
-        return colors +
-                " " + size +
-                " " + cottonPart +
-                " " + quantity;
     }
 
 }

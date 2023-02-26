@@ -29,7 +29,6 @@ public class SocksServiceImpl implements SocksService {
 
     private ArrayList<Socks> socksList = new ArrayList<>();
     private final FilesService filesService;
-
     @Value("${path.to.data.dir}")
     private String dataFilePath;
     @Value("${socks.data.file}")
@@ -76,11 +75,6 @@ public class SocksServiceImpl implements SocksService {
 
             }
         }
-        Socks socks2 = new Socks(color, size, cotton, quantity);
-        if (!socksList.contains(socks2)) {
-            socksList.add(socks2);
-            saveToFile();
-        }
     }
 
     @Override
@@ -111,11 +105,6 @@ public class SocksServiceImpl implements SocksService {
                 }
 
             }
-        }
-        Socks socks2 = new Socks(color, size, cotton, quantity);
-        if (!socksList.contains(socks2)) {
-            socksList.add(socks2);
-            saveToFile();
         }
     }
 
